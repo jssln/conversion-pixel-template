@@ -161,9 +161,9 @@ function getAdditionalParams(functionName: string) {
 
 function getAutoscrapedData(): Object {
   const data = {
-    AUTOSCRAPED_DATA_PARAMS.currentPageUrl: location.href,
-    AUTOSCRAPED_DATA_PARAMS.referrerUrl: document.referrer,
-    AUTOSCRAPED_DATA_PARAMS.didPixelFireInIframe: window.top !== window,
+    [AUTOSCRAPED_DATA_PARAMS.currentPageUrl]: location.href,
+    [AUTOSCRAPED_DATA_PARAMS.referrerUrl]: document.referrer,
+    [AUTOSCRAPED_DATA_PARAMS.didPixelFireInIframe]: window.top !== window,
   };
   // `screen` is not a public standard, but major browsers support it.
   if (screen) {
