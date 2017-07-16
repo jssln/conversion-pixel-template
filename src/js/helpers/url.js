@@ -1,6 +1,6 @@
 // @flow
 
-import type { Data, StringifiedData } from './types/types';
+import type { Data, StringifiedData } from '../types/types';
 
 
 function serializeParams(

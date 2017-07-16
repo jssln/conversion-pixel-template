@@ -1,8 +1,8 @@
 // @flow
 
-import downloadUtils from './download';
-import { getRandomString } from './helpers';
-import urlUtils from './url';
+import downloadUtils from './helpers/download';
+import { getRandomString, isValidObject } from './helpers/misc';
+import urlUtils from './helpers/url';
 
 import type { Params } from './types/types';
 
@@ -149,11 +149,6 @@ function sendEvent(
 function isTagIdSet(functionName: string): boolean {
   return !!window[functionName].tagId;
 }
-
-function isValidDataObject(data: ?Object): boolean {
-  return data && typeof(data) === 'object';
-}
-
 
 function getAdditionalParams(functionName: string) {
   const params = {};

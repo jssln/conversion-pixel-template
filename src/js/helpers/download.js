@@ -1,8 +1,8 @@
 // @flow
 
-import { getRandomString } from './helpers';
+import { getRandomString } from './misc';
 
-import type { Params } from './types/types';
+import type { Params } from '../types/types';
 
 
 function get(fullUrl: string) {
