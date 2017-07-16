@@ -52,5 +52,5 @@ function initTracking(
 
 
 module.exports = {
-  initTracking;
+  initTracking,
 };
