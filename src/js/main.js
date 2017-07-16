@@ -2,6 +2,9 @@
 
 import downloadUtils from './download';
 import { getRandomString } from './helpers';
+import urlUtils from './url';
+
+import type { Params } from './types/types';
 
 
 // TODO: Make these configurable.
@@ -124,11 +127,11 @@ function recordConversion(
 function sendEvent(
   functionName: string,
   trackingServerUrl: string,
-  params: Object
+  params: Object,
 ) {
   const augmentedParams = Object.assign({}, params, getAdditionalParams(functionName));
-  const serializedParams = serializeParams(augmentedParams);
-  const finalUrl = getFullUrl(serializedParams);
+  const serializedParams = urlUtils.serializeParams(augmentedParams);
+  const finalUrl = urlUtils.buildUrl(trackingServerUrl, serializedParams);
 
   // Most browsers limit GET requests to under 2048 characters. POST requests don't have this limit.
   if (finalUrl.length < 2048) {
@@ -173,10 +176,6 @@ function getAutoscrapedData(): Object {
     data[AUTOSCRAPED_DATA_PARAMS.screenWidth] = screen.width;
   }
   return data;
-}
-
-function getServerUrl() {
-  // TODO
 }
 
 

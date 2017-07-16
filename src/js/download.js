@@ -2,10 +2,7 @@
 
 import { getRandomString } from './helpers';
 
-
-type Params = {
-  [key: string]: string,
-};
+import type { Params } from './types/types';
 
 
 function get(fullUrl: string) {
