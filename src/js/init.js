@@ -13,14 +13,15 @@
  * @param version The version of your pixel. This is technically not required, but good practice. If you
  *   ever upgrade your pixel implementation, this version will help.
  * @param urlOfMainCode The url to the file that contains the main JS code of the pixel.
+ * @return Whether the initialization setup succeeded.
  */
-function(
+export default function initTracking(
   functionName: string,
   version: string,
   urlOfMainCode: string,
-) {
+): boolean {
   if (window[functionName]) {
-    return;
+    return true;
   }
 
   // Define the functionName to initially push events to a queue. (See bullet #2 above.)
@@ -29,7 +30,7 @@ function(
   window[functionName] = function() {
     const argumentsAsArray = Array.from(arguments);
     window[functionName].queue.push(argumentsAsArray);
-  }
+  };
   window[functionName].queue = [];
   window[functionName].version = version;
 
@@ -38,7 +39,13 @@ function(
   const scriptElement = document.createElement('script');
   scriptElement.async = true;
   scriptElement.src = urlOfMainCode;
-  const firstScriptTagInPage = document.getElementsByTagName('script')[0];
+  const arbitraryScriptTagInPage = document.getElementsByTagName('script')[0];
+  if (!arbitraryScriptTagInPage || !arbitraryScriptTagInPage.parentNode) {
+    // This situation is not expected when running in the browser.
+    return false;
+  }
   // Downloading will begin after the script is inserted into the DOM.
-  firstScriptTagInPage.parentNode.insertBefore(scriptElement, firstScriptTagInPage);
+  arbitraryScriptTagInPage.parentNode.insertBefore(scriptElement, arbitraryScriptTagInPage);
+
+  return true;
 }

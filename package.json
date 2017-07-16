@@ -13,6 +13,6 @@
     "flow-bin": "^0.50.0"
   },
   "scripts": {
-    "flow": "./node_modules/bin/flow"
+    "flow": "./node_modules/.bin/flow"
   }
 }
