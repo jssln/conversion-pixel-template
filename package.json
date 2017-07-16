@@ -1,0 +1,9 @@
+{
+  "name": "conversion-pixel-template",
+  "version": "1.0.0",
+  "description": "Template code for creating a conversion pixel",
+  "main": "index.js",
+  "repository": "git@github.com:jssln/conversion-pixel-template.git",
+  "author": "Jess Lin <perdendosi@gmail.com>",
+  "license": "MIT"
+}
