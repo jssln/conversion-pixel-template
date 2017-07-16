@@ -8,8 +8,8 @@ module.exports = {
   context: moduleRoot,
 
   entry: {
-    'init': './src/js/init.js',
-    'main': './src/js/main.js',
+    'init': './src/js/createInit.js',
+    'main': './src/js/createMain.js',
   },
 
   output: {
@@ -34,5 +34,4 @@ module.exports = {
 
     ],
   },
-  devtool: 'cheap-module-eval-source-map',
 };
