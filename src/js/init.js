@@ -15,7 +15,7 @@
  * @param urlOfMainCode The url to the file that contains the main JS code of the pixel.
  * @return Whether the initialization setup succeeded.
  */
-export default function initTracking(
+function initTracking(
   functionName: string,
   version: string,
   urlOfMainCode: string,
@@ -49,3 +49,8 @@ export default function initTracking(
 
   return true;
 }
+
+
+module.exports = {
+  initTracking;
+};
