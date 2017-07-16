@@ -1,6 +1,7 @@
 // @flow
 
 import downloadUtils from './download';
+import { getRandomString } from './helpers';
 
 
 // TODO: Make these configurable.
@@ -131,9 +132,9 @@ function sendEvent(
 
   // Most browsers limit GET requests to under 2048 characters. POST requests don't have this limit.
   if (finalUrl.length < 2048) {
-    downloadUtils.get();
+    downloadUtils.get(finalUrl);
   } else {
-    downloadUtils.post();
+    downloadUtils.post(trackingServerUrl, serializedParams);
   }
 }
 
@@ -173,11 +174,6 @@ function getAutoscrapedData(): Object {
   }
   return data;
 }
-
-function getRandomString(): string {
-  return String(Math.floor(Math.random() * 100000));
-}
-
 
 function getServerUrl() {
   // TODO
