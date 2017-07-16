@@ -1,27 +1,33 @@
 // @flow
 
-type APIOptions = {
-  setTagId?: string,
-  recordPageLoad?: string,
-  recordConversion?: string,
-};
+import downloadUtils from './download';
 
+
+// TODO: Make these configurable.
 const DEFAULT_OPTIONS = {
   setTagId: 'setTag',
   recordPageLoad: 'trackPageLoad',
   recordConversion: 'trackConversion',
 };
 
-// TODO: Also make these configurable.
 const PARAMS = {
   tagId: 'tid',
   eventName: 'ev',
   eventData: 'ed',
+  cacheBuster: 'cb',
+  autoScrapedData: 'au',
 };
 
-// TODO: Also make these configurable.
 const EVENT_NAMES = {
   pageLoad: 'pageload',
+};
+
+const AUTOSCRAPED_DATA_PARAMS = {
+  currentPageUrl: 'loc',
+  referrerUrl: 'ref',
+  didPixelFireInIframe: 'inf',
+  screenHeight: 'sht',
+  screenWidth: 'swd',
 };
 
 
@@ -38,7 +44,6 @@ const EVENT_NAMES = {
 function initMain(
   functionName: string,
   trackingServerUrl: string,
-  options: ?APIOptions,
 ) {
   if (!window[functionName] || !window[functionName].queue) {
     // We are running in an environment where the init code did not run first (so the rest of this code won't work),
@@ -47,13 +52,14 @@ function initMain(
   }
 
   const eventQueue: Array<any> = window[functionName].queue;
-  eventQueue.forEach(eventArgs => handleCall(functionName, ...eventArgs));
+  eventQueue.forEach(eventArgs => handleCall(functionName, trackingServerUrl, ...eventArgs));
   window[functionName] = handleCall;
 }
 
 
 function handleCall(
   functionName: string,
+  trackingServerUrl: string,
   command: string,
   firstArg: string | Object,
   data?: Object,
@@ -65,9 +71,9 @@ function handleCall(
       return;
     }
     if (command === DEFAULT_OPTIONS.recordPageLoad) {
-      recordPageLoad(functionName, firstArg);
+      recordPageLoad(functionName, trackingServerUrl, firstArg);
     } else if (command === DEFAULT_OPTIONS.recordConversion) {
-      recordConversion(functionName, firstArg, data);
+      recordConversion(functionName, trackingServerUrl, firstArg, data);
     }
   }
 }
@@ -87,6 +93,7 @@ function setTagId(
 
 function recordPageLoad(
   functionName: string,
+  trackingServerUrl: string,
   data?: Object,
 ) {
   const params = {};
@@ -94,12 +101,13 @@ function recordPageLoad(
   if (isValidDataObject(data)) {
     params[PARAMS.eventData] = data;
   }
-  sendEvent(params);
+  sendEvent(functionName, trackingServerUrl, params);
 }
 
 
 function recordConversion(
   functionName: string,
+  trackingServerUrl: string,
   eventName: string,
   data?: Object,
 ) {
@@ -108,16 +116,31 @@ function recordConversion(
   if (isValidDataObject(data)) {
     params[PARAMS.eventData] = data;
   }
-  sendEvent(params);
+  sendEvent(functionName, trackingServerUrl, params);
 }
+
+
+function sendEvent(
+  functionName: string,
+  trackingServerUrl: string,
+  params: Object
+) {
+  const augmentedParams = Object.assign({}, params, getAdditionalParams(functionName));
+  const serializedParams = serializeParams(augmentedParams);
+  const finalUrl = getFullUrl(serializedParams);
+
+  // Most browsers limit GET requests to under 2048 characters. POST requests don't have this limit.
+  if (finalUrl.length < 2048) {
+    downloadUtils.get();
+  } else {
+    downloadUtils.post();
+  }
+}
+
 
 /**
  * Section: Helper methods
  */
-
-function sendEvent() {
-  // TODO
-}
 
 function isTagIdSet(functionName: string): boolean {
   return !!window[functionName].tagId;
@@ -125,6 +148,39 @@ function isTagIdSet(functionName: string): boolean {
 
 function isValidDataObject(data: ?Object): boolean {
   return data && typeof(data) === 'object';
+}
+
+
+function getAdditionalParams(functionName: string) {
+  const params = {};
+  params[PARAMS.tagId] = window[functionName].tagId;
+  params[PARAMS.autoScrapedData] = getAutoscrapedData();
+  // Prevent browsers from caching the event url.
+  params[PARAMS.cacheBuster] = getRandomString();
+  return params;
+}
+
+function getAutoscrapedData(): Object {
+  const data = {
+    AUTOSCRAPED_DATA_PARAMS.currentPageUrl: location.href,
+    AUTOSCRAPED_DATA_PARAMS.referrerUrl: document.referrer,
+    AUTOSCRAPED_DATA_PARAMS.didPixelFireInIframe: window.top !== window,
+  };
+  // `screen` is not a public standard, but major browsers support it.
+  if (screen) {
+    data[AUTOSCRAPED_DATA_PARAMS.screenHeight] = screen.height;
+    data[AUTOSCRAPED_DATA_PARAMS.screenWidth] = screen.width;
+  }
+  return data;
+}
+
+function getRandomString(): string {
+  return String(Math.floor(Math.random() * 100000));
+}
+
+
+function getServerUrl() {
+  // TODO
 }
 
 
