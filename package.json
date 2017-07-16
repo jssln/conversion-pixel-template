@@ -5,5 +5,14 @@
   "main": "index.js",
   "repository": "git@github.com:jssln/conversion-pixel-template.git",
   "author": "Jess Lin <perdendosi@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.50.0"
+  },
+  "scripts": {
+    "flow": "./node_modules/bin/flow"
+  }
 }

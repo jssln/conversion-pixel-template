@@ -1,0 +1,10 @@
+[ignore]
+
+[include]
+# Flow sets the project root to be the directory this file is in.
+# The paths below are interpreted by Flow to be relative to the project root.
+./src/js
+
+[libs]
+
+[options]
