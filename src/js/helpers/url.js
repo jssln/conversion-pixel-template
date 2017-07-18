@@ -6,7 +6,7 @@ import type { Data, StringifiedData } from '../types/types';
 function serializeParams(
   params: Data,
 ): StringifiedData {
-  const newParams =
+  const newParams = {};
   Object.keys(params).forEach((key) => {
     const value = params[key];
     if (typeof(value) === 'object') {

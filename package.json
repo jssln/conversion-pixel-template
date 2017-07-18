@@ -9,13 +9,17 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-loader": "^7.1.1",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-flow": "^6.23.0",
+    "babel-register": "^6.24.1",
     "flow-bin": "^0.50.0",
+    "mocha": "^3.4.2",
     "webpack": "^3.3.0"
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack --config src/config/webpack.config.js",
-    "flow": "./node_modules/.bin/flow"
+    "flow": "./node_modules/.bin/flow",
+    "test": "./node_modules/.bin/mocha ./tests/js/* --compilers js:babel-register --require babel-polyfill"
   }
 }
