@@ -102,7 +102,7 @@ function recordPageLoad(
 ) {
   const params = {};
   params[PARAMS.eventName] = EVENT_NAMES.pageLoad;
-  if (isValidDataObject(data)) {
+  if (isValidObject(data)) {
     params[PARAMS.eventData] = data;
   }
   sendEvent(functionName, trackingServerUrl, params);
@@ -117,7 +117,7 @@ function recordConversion(
 ) {
   const params = {};
   params[PARAMS.eventName] = eventName;
-  if (isValidDataObject(data)) {
+  if (isValidObject(data)) {
     params[PARAMS.eventData] = data;
   }
   sendEvent(functionName, trackingServerUrl, params);
