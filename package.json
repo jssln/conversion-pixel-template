@@ -19,8 +19,9 @@
     "webpack": "^3.3.0"
   },
   "scripts": {
-    "build": "./node_modules/.bin/webpack --config src/config/webpack.config.js",
+    "build": "./node_modules/.bin/webpack --config src/config/webpack.config.js && npm run generateDemo",
     "flow": "./node_modules/.bin/flow",
+    "generateDemo": "./node_modules/.bin/babel-node ./script/generate_demo.js trackForDemo",
     "test": "./node_modules/.bin/mocha ./tests/js/* --compilers js:babel-register --require babel-polyfill"
   }
 }
